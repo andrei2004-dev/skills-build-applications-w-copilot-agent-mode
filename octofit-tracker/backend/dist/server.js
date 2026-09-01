@@ -7,6 +7,26 @@ import Leaderboard from './models/Leaderboard.js';
 import Workout from './models/Workout.js';
 const app = express();
 const port = 8000;
+const allowedOrigins = [
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+    `https://${process.env.CODESPACE_NAME}-5173.app.github.dev`,
+].filter(Boolean);
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    if (origin && (allowedOrigins.includes(origin) || origin.endsWith('.app.github.dev'))) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    else if (!origin) {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+    }
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(204);
+    }
+    next();
+});
 // Codespaces-aware API URL support
 const getApiUrl = () => {
     const codespaceName = process.env.CODESPACE_NAME;
