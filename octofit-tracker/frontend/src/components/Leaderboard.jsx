@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { fetchApiData } from '../api';
 
+// Codespaces API endpoint: https://{CODESPACE_NAME}-8000.app.github.dev/api/leaderboard
+
 export default function Leaderboard() {
   const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(true);
